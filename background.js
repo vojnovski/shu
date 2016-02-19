@@ -1,3 +1,8 @@
+/*
+  Try to block all cookies if possible.
+  Might need to put forbes back into allowed cookies depending on adblocker settings
+*/
+
 var ALLOW_COOKIES = ["nytimes", "ft.com"]
 
 function changeRefer(details) {
@@ -16,7 +21,7 @@ function changeRefer(details) {
     });
 
   }).map(function(header) {
-
+    
     if (header.name === "Referer") {
       header.value = "https://www.google.com/";
       foundReferer = true;
@@ -27,7 +32,7 @@ function changeRefer(details) {
     }
     return header;
   })
-
+  
   // append referer
   if (!foundReferer) {
     reqHeaders.push({
@@ -55,11 +60,11 @@ function blockCookies(details) {
 }
 
 chrome.webRequest.onBeforeSendHeaders.addListener(changeRefer, {
-  urls: [""],
+  urls: ["<all_urls>"],
   types: ["main_frame"],
 }, ["requestHeaders", "blocking"]);
 
 chrome.webRequest.onHeadersReceived.addListener(blockCookies, {
-  urls: [""],
+  urls: ["<all_urls>"],
   types: ["main_frame"],
 }, ["responseHeaders", "blocking"]);
